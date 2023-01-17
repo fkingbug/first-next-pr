@@ -3,10 +3,11 @@ import Head from 'next/head'
 
 import { Inter } from '@next/font/google'
 import { Button, Htag, P, Rating, Tag } from '@/components'
+import { Layout, withLayout } from '@/layout/Layout'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+function Home(): JSX.Element {
   const [rating, setRating] = React.useState<number>(4)
 
   return (
@@ -24,22 +25,26 @@ export default function Home() {
         />
       </Head>
       <main>
-        <Htag tag='h1'>Text</Htag>
-        <Button apperance='primary' arrow='down'>
-          textButton
-        </Button>
-        <Button apperance='ghost' arrow='right'>
-          textButtonGhost
-        </Button>
-        <P size='l'>large</P>
-        <P size='m'>medium</P>
-        <P size='s'>small</P>
-        <Tag size='s' color='primary'>
-          Tag
-        </Tag>
+        <>
+          <Htag tag='h1'>Text</Htag>
+          <Button apperance='primary' arrow='down'>
+            textButton
+          </Button>
+          <Button apperance='ghost' arrow='right'>
+            textButtonGhost
+          </Button>
+          <P size='l'>large</P>
+          <P size='m'>medium</P>
+          <P size='s'>small</P>
+          <Tag size='s' color='primary'>
+            Tag
+          </Tag>
 
-        <Rating rating={rating} setRating={setRating} isEditable />
+          <Rating rating={rating} setRating={setRating} isEditable />
+        </>
       </main>
     </>
   )
 }
+
+export default withLayout(Home)
