@@ -32,4 +32,5 @@ export interface ProductModel {
   categories: string[]
   initialRating: number
   characterisrics: ProductCharacteristic[]
+  disadvantages: string
 }

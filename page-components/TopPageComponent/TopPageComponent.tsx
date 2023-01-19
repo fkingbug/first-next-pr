@@ -3,7 +3,7 @@ import cn from 'classnames'
 import styles from './TopPageComponent.module.css'
 
 import { TopPageComponentsProps } from './TopPageComponent.props'
-import { Advantages, Htag, Sort, Tag } from '@/components'
+import { Advantages, Htag, Product, Sort, Tag } from '@/components'
 import { HhData } from '@/components/HhData/HhData'
 import { TopLevelCategory } from '@/interfaces/toppage.interface'
 import { SortEnum } from '@/components/Sort/Sort.props'
@@ -30,7 +30,7 @@ export const TopPageComponent = ({
         </Tag>
         <Sort sort={sort} setSort={setSort} />
       </div>
-      <div>{sortedProducts && sortedProducts.map(p => <div key={p._id}>{p.title}</div>)}</div>
+      <div>{sortedProducts && sortedProducts.map(p => <Product product={p} key={p._id} />)}</div>
       <div className={styles.hhTitle}>
         <Htag tag='h2'>Вакансии - {page.category}</Htag>
         <Tag color='red' size='m'>
@@ -56,3 +56,5 @@ export const TopPageComponent = ({
     </div>
   )
 }
+
+//15-006
