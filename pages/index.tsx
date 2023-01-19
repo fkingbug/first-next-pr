@@ -45,11 +45,6 @@ function Home({ menu, firstCategory }: HomeProps): JSX.Element {
           </Tag>
 
           <Rating rating={rating} setRating={setRating} isEditable />
-          <ul>
-            {menu.map(m => (
-              <li key={m._id.secondCategory}>{m._id.secondCategory}</li>
-            ))}
-          </ul>
         </>
       </main>
     </>
@@ -62,6 +57,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const firstCategory = 0
   const { data: menu } = await axios.post<MenuItem[]>(
     process.env.NEXT_PUBLIC_DOMAIN + '/api/top-page/find',
+
     {
       firstCategory,
     }

@@ -2,39 +2,69 @@ import React from 'react'
 import axios from 'axios'
 
 import { withLayout } from '@/layout/Layout'
-
-import type { GetStaticProps, GetStaticPropsContext } from 'next'
 import { MenuItem } from '@/interfaces/menu.interface'
-import type { TopPageModel } from '@/interfaces/toppage.interface'
-import { ParsedUrlQuery } from 'querystring'
 
-function Course({ menu }: CourseProps): JSX.Element {
-  return <></>
+import type { ParsedUrlQuery } from 'querystring'
+import type { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
+import type { TopPageModel } from '@/interfaces/toppage.interface'
+import type { ProductModel } from '@/interfaces/product.interface'
+
+const firstCategory = 0
+
+function Course({ menu, page, products }: CourseProps): JSX.Element {
+  return <>{products && products.length}</>
 }
 
 export default withLayout(Course)
 
-//Запрос на сервер чтобы пришла нода уже с данными в браузер
-export const getStaticProps: GetStaticProps<CourseProps> = async ({
-  params,
-}: GetStaticPropsContext<ParsedUrlQuery>) => {
-  const firstCategory = 0
+export const getStaticPaths: GetStaticPaths = async () => {
   const { data: menu } = await axios.post<MenuItem[]>(
     process.env.NEXT_PUBLIC_DOMAIN + '/api/top-page/find',
     {
       firstCategory,
     }
   )
-  const { data: page } = await axios.post<TopPageModel>(
-    process.env.NEXT_PUBLIC_DOMAIN + '/api/top-page/byAlias' + params,
+  return {
+    //Из массива массивов достаем урлы каждого объекта
+    paths: menu.flatMap(m => m.pages.map(p => '/courses/' + p.alias)),
+    fallback: true,
+  }
+}
+
+//Запрос на сервер чтобы пришла нода уже с данными в браузер
+export const getStaticProps: GetStaticProps<CourseProps> = async ({
+  params,
+}: GetStaticPropsContext<ParsedUrlQuery>) => {
+  if (!params) {
+    //нету params верни 404
+    return {
+      notFound: true,
+    }
+  }
+  const { data: menu } = await axios.post<MenuItem[]>(
+    process.env.NEXT_PUBLIC_DOMAIN + '/api/top-page/find',
     {
       firstCategory,
+    }
+  )
+  const { data: page } = await axios.get<TopPageModel>(
+    //alias - так название файла
+    process.env.NEXT_PUBLIC_DOMAIN + '/api/top-page/byAlias/' + params.alias
+  )
+  const { data: products } = await axios.post<ProductModel[]>(
+    //alias - так название файла
+    process.env.NEXT_PUBLIC_DOMAIN + '/api/product/find',
+    {
+      category: page.category,
+      limit: 10,
     }
   )
   return {
     props: {
       menu,
       firstCategory,
+      page,
+      products,
     },
   }
 }
@@ -43,6 +73,5 @@ interface CourseProps extends Record<string, unknown> {
   menu: MenuItem[]
   firstCategory: number
   page: TopPageModel
+  products: ProductModel[]
 }
-
-//10 : 00
