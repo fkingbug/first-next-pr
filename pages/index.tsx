@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { Inter } from '@next/font/google'
 import { withLayout } from '@/layout/Layout'
-import { Button, Htag, P, Rating, Tag } from '@/components'
+import { Button, Htag, Input, P, Rating, Tag, Textarea } from '@/components'
 
 import type { GetStaticProps } from 'next'
 import type { MenuItem } from '@/interfaces/menu.interface'
@@ -45,6 +45,9 @@ function Home({ menu, firstCategory }: HomeProps): JSX.Element {
           </Tag>
 
           <Rating rating={rating} setRating={setRating} isEditable />
+          <Input />
+          <Textarea />
+
           <ul>
             {menu.map(m => (
               <li key={m._id.secondCategory}>{m._id.secondCategory}</li>
