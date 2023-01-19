@@ -31,7 +31,7 @@
 }
 .grey {
   color: var(--white);
-  background: var(--green-light);
+  background: var(--gray-light);
 
   font-weight: bold;
 }

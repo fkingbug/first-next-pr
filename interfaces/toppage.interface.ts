@@ -8,7 +8,7 @@ export enum TopLevelCategory {
 export interface TopPageAdvantage {
   _id: string
   title: string
-  desctiption: string
+  description: string
 }
 
 export interface HhData {
@@ -17,7 +17,7 @@ export interface HhData {
   updateAt: Date
   juniorSalary: number
   seniorSalary: number
-  mioddleSalary: number
+  middleSalary: number
 }
 
 export interface TopPageModel {

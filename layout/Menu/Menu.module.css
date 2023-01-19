@@ -22,11 +22,12 @@
   margin-bottom: 10px;
   cursor: pointer;
   text-transform: uppercase;
-  color: var(--gray-dark);
-  font-weight: 300;
+  color: grey;
+  font-weight: 700;
   font-size: 12px;
   line-height: 16px;
 }
+
 .secondBlock {
   margin-top: 15px;
   margin-left: 12px;
@@ -34,7 +35,12 @@
 
   border-left: 1px solid #dfdfdf;
 }
-
+.secondLevelBlock {
+  display: none;
+}
+.secondLevelBlockOpened {
+  display: block;
+}
 .secondLevelBlockOpened:last-child {
   margin-bottom: 20px;
 }

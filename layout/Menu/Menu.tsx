@@ -9,6 +9,8 @@ import { AiFillCloud } from 'react-icons/ai'
 import { IoBookSharp } from 'react-icons/io5'
 import { FiBox } from 'react-icons/fi'
 import { TopLevelCategory } from '@/interfaces/toppage.interface'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const firstLevelMenu: FirstLevelMenuItem[] = [
   {
@@ -40,12 +42,26 @@ const firstLevelMenu: FirstLevelMenuItem[] = [
 export const Menu = (): JSX.Element => {
   const { menu, setMenu, firstCategory } = useContext(AppContext)
 
+  const router = useRouter()
+
+  const openSecondLebel = (secondCategory: string) => {
+    setMenu &&
+      setMenu(
+        menu.map(m => {
+          if (m._id.secondCategory === secondCategory) {
+            m.isOpened = !m.isOpened
+          }
+          return m
+        })
+      )
+  }
+
   const buildFirstLevel = () => {
     return (
       <>
         {firstLevelMenu.map(m => (
           <div key={m.route}>
-            <a href={`/${m.route}`}>
+            <Link href={`/${m.route}`}>
               <div
                 className={cn(styles.firstLevel, {
                   [styles.firstLevelActive]: m.id === firstCategory,
@@ -54,7 +70,7 @@ export const Menu = (): JSX.Element => {
                 {m.icon}
                 <span>{m.name}</span>
               </div>
-            </a>
+            </Link>
             {m.id === firstCategory && buildSecondLevel(m)}
           </div>
         ))}
@@ -64,31 +80,41 @@ export const Menu = (): JSX.Element => {
   const buildSecondLevel = (menuItem: FirstLevelMenuItem) => {
     return (
       <div className={styles.secondBlock}>
-        {menu.map(m => (
-          <div key={m._id.secondCategory}>
-            <div className={styles.secondLevel}>{m._id.secondCategory}</div>
-            <div
-              className={cn(styles.secondLevelBlock, {
-                [styles.secondLevelBlockOpened]: m.isOpened,
-              })}
-            >
-              {buildThirdLevel(m.pages, menuItem.route)}
+        {menu.map(m => {
+          if (m.pages.map(p => p.alias).includes(router.asPath.split('/')[2])) {
+            m.isOpened = true
+          }
+          return (
+            <div key={m._id.secondCategory}>
+              <div
+                className={styles.secondLevel}
+                onClick={() => openSecondLebel(m._id.secondCategory)}
+              >
+                {m._id.secondCategory}
+              </div>
+              <div
+                className={cn(styles.secondLevelBlock, {
+                  [styles.secondLevelBlockOpened]: m.isOpened,
+                })}
+              >
+                {buildThirdLevel(m.pages, menuItem.route)}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     )
   }
   const buildThirdLevel = (pages: PageItem[], route: string) => {
     return pages.map(p => (
-      <a
+      <Link
         href={`/${route}/${p.alias}`}
         className={cn(styles.thirdLevel, {
-          [styles.thirdLevelActive]: false,
+          [styles.thirdLevelActive]: `/${route}/${p.alias}` == router.asPath,
         })}
       >
         {p.category}
-      </a>
+      </Link>
     ))
   }
 
